@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Experimental JS sound</title>
+
+
+</head>
+<body>
+
+<script>
+    function beep() {
+        let c4 = new Audio("waves/C4.wav");
+        console.log("Beep was called");
+        c4.play();
+        console.log("Sound was played");
+    }
+
+    const context = new window.AudioContext();
+
+    const whoopNoise = context.createOscillator();
+    whoopNoise.frequency = "600";
+    whoopNoise.type = "sine";
+    whoopNoise.frequency.exponentialRampToValueAtTime(
+        800,
+        context.currentTime + 0.05
+    );
+    whoopNoise.frequency.exponentialRampToValueAtTime(
+        1000,
+        context.currentTime + 0.15
+    );
+
+    const whoopGain = context.createGain();
+    whoopGain.gain.exponentialRampToValueAtTime(
+        0.01,
+        context.currentTime + 0.3
+    );
+
+    const whoopFilter = context.createBiquadFilter("bandpass");
+    whoopFilter.Q = 0.01;
+
+    whoopNoise
+        .connect(whoopFilter)
+        .connect(whoopGain)
+        .connect(context.destination);
+
+    function whoop() {
+        whoopNoise.start();
+        whoopNoise.stop(context.currentTime + 0.2);
+    }
+</script>
+
+    <h1 onpointerenter="beep()">Does this page make sound?</h1>
+
+    <button id="success">Play Success Sound</button>
+    <br><br>
+        <button id="error">Play Error Sound</button>
+
+        <script>
+            // const context = new window.AudioContext();
+
+            const successNoise = context.createOscillator();
+            successNoise.frequency = "600";
+            successNoise.type = "sine";
+            successNoise.frequency.exponentialRampToValueAtTime(
+            800,
+            context.currentTime + 0.05
+            );
+            successNoise.frequency.exponentialRampToValueAtTime(
+            1000,
+            context.currentTime + 0.15
+            );
+
+            const successGain = context.createGain();
+            successGain.gain.exponentialRampToValueAtTime(
+            0.01,
+            context.currentTime + 0.3
+            );
+
+            successFilter = context.createBiquadFilter("bandpass");
+            successFilter.Q = 0.01;
+
+            successNoise
+            .connect(successFilter)
+            .connect(successGain)
+            .connect(context.destination);
+
+            function playSuccess() {
+                successNoise.start();
+                successNoise.stop(context.currentTime + 0.3);
+            }
+            function playError() {
+            const errorNoise = context.createOscillator();
+            errorNoise.frequency = "400";
+            errorNoise.type = "sine";
+            errorNoise.frequency.exponentialRampToValueAtTime(
+            200,
+            context.currentTime + 0.05
+            );
+            errorNoise.frequency.exponentialRampToValueAtTime(
+            100,
+            context.currentTime + 0.2
+            );
+
+            const errorGain = context.createGain();
+            errorGain.gain.exponentialRampToValueAtTime(
+            0.01,
+            context.currentTime + 0.3
+            );
+
+            errorNoise.connect(errorGain).connect(context.destination);
+            errorNoise.start();
+            errorNoise.stop(context.currentTime + 0.3);
+        }
+
+            let successButton = document.querySelector("#success");
+            successButton.addEventListener("pointerenter", function() {
+            whoop();
+        })
+
+            let errorButton = document.querySelector("#error");
+            errorButton.addEventListener("click", function() {
+            playError();
+        })
+</script>
+
+
+</body>
+</html>
