@@ -12,12 +12,7 @@
 </head>
 <body>
 
-<script>
-  function entered(s) {
-    console.log("Entered shape" + s);
-    alert("fwoosh");
-  }
-</script>
+<script src="beeps.js"></script>
 
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xl="http://www.w3.org/1999/xlink" version="1.1" xmlns:dc="http://purl.org/dc/elements/1.1/" viewBox="89.5 133.5 606.78906 319" width="606.78906" height="319">
   <defs>
@@ -80,62 +75,6 @@
 </div>
 
 <script>
-  const context = new window.AudioContext();
-
-function playSuccess() {
-    const successNoise = context.createOscillator();
-    successNoise.frequency = "600";
-    successNoise.type = "sine";
-    successNoise.frequency.exponentialRampToValueAtTime(
-        800,
-        context.currentTime + 0.05
-    );
-    successNoise.frequency.exponentialRampToValueAtTime(
-        1000,
-        context.currentTime + 0.15
-    );
-
-    successGain = context.createGain();
-    successGain.gain.exponentialRampToValueAtTime(
-        0.01,
-        context.currentTime + 0.3
-    );
-
-    successFilter = context.createBiquadFilter("bandpass");
-    successFilter.Q = 0.01;
-
-    successNoise
-        .connect(successFilter)
-        .connect(successGain)
-        .connect(context.destination);
-    successNoise.start();
-    successNoise.stop(context.currentTime + 0.2);
-}
-
-function playError() {
-    const errorNoise = context.createOscillator();
-    errorNoise.frequency = "400";
-    errorNoise.type = "sine";
-    errorNoise.frequency.exponentialRampToValueAtTime(
-        200,
-        context.currentTime + 0.05
-    );
-    errorNoise.frequency.exponentialRampToValueAtTime(
-        100,
-        context.currentTime + 0.2
-    );
-
-    errorGain = context.createGain();
-    errorGain.gain.exponentialRampToValueAtTime(
-        0.01,
-        context.currentTime + 0.3
-    );
-
-    errorNoise.connect(errorGain).connect(context.destination);
-    errorNoise.start();
-    errorNoise.stop(context.currentTime + 0.3);
-}
-
 
 let bars= document.querySelectorAll("g .bar");
 bars.forEach((shape) => {
@@ -146,7 +85,7 @@ bars.forEach((shape) => {
     shape.addEventListener(e, function () {
       document.getElementById("message").innerHTML = e + " " + title;
       console.log(e + " on " + shape + " " + title);
-
+      ping(600,1000);
     });
   });
 });
